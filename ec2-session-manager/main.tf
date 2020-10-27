@@ -249,6 +249,9 @@ resource "aws_ssm_document" "session_manager" {
       // Add 2 followings to send logs to cloudwatch
       cloudWatchLogGroupName      = aws_cloudwatch_log_group.session_manager.name
       cloudWatchEncryptionEnabled = true
+      shellProfile = {
+        linux = "bash"
+      }
     }
   })
 }

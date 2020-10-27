@@ -35,10 +35,40 @@ data "aws_iam_policy_document" "session_manager" {
       "ssmmessages:CreateControlChannel",
       "ssmmessages:CreateDataChannel",
       "ssmmessages:OpenControlChannel",
-      "ssmmessages:OpenDataChannel"
+      "ssmmessages:OpenDataChannel",
+      "ssm:UpdateInstanceInformation"
     ]
     resources = ["*"]
   }
+
+  // Following 2 statements are not required to use Session Manager.
+  // However they are useful to use SSM RunCommand (to update SSM Agent for example)
+  statement {
+    sid    = "AllowSSMUsage"
+    effect = "Allow"
+    actions = [
+      "ssm:ListInstanceAssociations",
+      "ssm:ListAssociations",
+      "ssm:UpdateInstanceInformation"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowEC2MessagesUsage"
+    effect = "Allow"
+    actions = [
+      "ec2messages:GetMessages",
+      "ec2messages:AcknowledgeMessage",
+      "ec2messages:DeleteMessage",
+      "ec2messages:FailMessage",
+      "ec2messages:GetEndpoint",
+      "ec2messages:GetMessages",
+      "ec2messages:SendReply",
+      "ec2:DescribeInstanceStatus"
+    ]
+    resources = ["*"]
+  }
+
 
   // Permissions to allow writing session logs in cloudwatch and encrypted s3
   statement {
